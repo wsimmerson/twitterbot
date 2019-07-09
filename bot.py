@@ -44,7 +44,7 @@ class TwitterBot():
         self.bot.get(
             "https://twitter.com/search?f=tweets&vertical=default&q=%23{}&src=tyah".format(self.hashtag))
 
-        for x in range(1, self.pages_to_scroll):
+        for _ in range(1, self.pages_to_scroll):
             self.bot.execute_script(
                 "window.scrollTo(0, document.body.scrollHeight);")
             # for more humanesque scrolling behavior
