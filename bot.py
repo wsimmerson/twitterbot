@@ -2,14 +2,21 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import random
 import time
+import sys
 
-import env
+import config
 
 
 class TwitterBot():
     def __init__(self, username, password):
         self.username = username
         self.password = password
+
+        try:
+            self.hashtag = config.HASHTAG
+        except:
+            print("config.HASHTAG must be defined")
+            sys.exit(1)
 
         self.bot = webdriver.Chrome()
 
@@ -30,7 +37,7 @@ class TwitterBot():
 
         time.sleep(15)
         self.bot.get(
-            "https://twitter.com/search?f=tweets&vertical=default&q=%23webdev&src=tyah")
+            "https://twitter.com/search?f=tweets&vertical=default&q=%23{}&src=tyah".format(self.hashtag))
 
         for x in range(1, 10):
             self.bot.execute_script(
@@ -50,5 +57,5 @@ class TwitterBot():
 
 
 if __name__ == '__main__':
-    bot = TwitterBot(env.USERNAME, env.PASSWORD)
+    bot = TwitterBot(config.USERNAME, config.PASSWORD)
     bot.activate()
