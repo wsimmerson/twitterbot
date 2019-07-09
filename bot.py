@@ -18,6 +18,11 @@ class TwitterBot():
             print("config.HASHTAG must be defined")
             sys.exit(1)
 
+        try:
+            self.pages_to_scroll = config.PAGES
+        except:
+            self.pages_to_scroll = 10
+
         self.bot = webdriver.Chrome()
 
     def activate(self):
@@ -39,12 +44,12 @@ class TwitterBot():
         self.bot.get(
             "https://twitter.com/search?f=tweets&vertical=default&q=%23{}&src=tyah".format(self.hashtag))
 
-        for x in range(1, 10):
+        for x in range(1, self.pages_to_scroll):
             self.bot.execute_script(
                 "window.scrollTo(0, document.body.scrollHeight);")
+            # for more humanesque scrolling behavior
             time.sleep(random.randrange(10, 30))
 
-        # tweets = self.bot.find_element_by_class_name("tweet")
         links = []
         for tweet in self.bot.find_elements_by_class_name("tweet"):
             links.append(tweet.get_attribute("data-permalink-path"))
@@ -52,8 +57,13 @@ class TwitterBot():
         for link in links:
             self.bot.get("https://twitter.com/{}".format(link))
             favBtn = self.bot.find_element_by_class_name("js-actionFavorite")
-            favBtn.click()
-            time.sleep(random.randrange(30, 60))
+            try:
+                favBtn.click()
+            except Exception as e:
+                # sometimes the clicks fail, not sure why yet.
+                print("Error: ", e)
+            # How long does it take for a human to read a tweet?
+            time.sleep(random.randrange(20, 60))
 
 
 if __name__ == '__main__':
