@@ -1,5 +1,5 @@
-##TwitterBot
-####Automatically sign into twitter, search a hashtag and like posts
+## TwitterBot
+#### Automatically sign into twitter, search a hashtag and like posts
 
 Just a silly project to play with selenium.
 
